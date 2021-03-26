@@ -4,6 +4,13 @@ ser = serial.Serial(
 )
 ser.flushInput()
 
+print("Serial is open: " + str(ser.isOpen()))
+print("Now Writing")
+ser.write("This is a test".encode())
+print("Did write, now read")
+x = ser.readline()
+print(x)
+
 while True:
     try:
         ser_bytes = ser.readline()
