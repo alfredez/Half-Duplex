@@ -1,6 +1,0 @@
-Hello World
-Initiate transmission
-Transmission started
-Terminating transmission
-terminated transmission
-End of Line
