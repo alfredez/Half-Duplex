@@ -1,20 +1,31 @@
 import serial
+import time
+COM = "COM5"
 ser = serial.Serial(
-    port="COM4", baudrate=38400, bytesize=8, stopbits=serial.STOPBITS_ONE
+    port=COM, baudrate=38400, bytesize=8, stopbits=serial.STOPBITS_ONE
 )
 ser.flushInput()
 
 print("Serial is open: " + str(ser.isOpen()))
 print("Now Writing")
-ser.write("This is a test".encode())
-print("Did write, now read")
-x = ser.readline()
-print(x)
+#ser.write("!AIABM,1,1,0,244123459,3,6,6te@PU>0U>061@E=B0lE=<4LD,4*13".encode("utf-8"))
+#ser.write(b'00000000010010100100100101110100111011010000110010010101101000000101000010000010010100111000000010010100111000000000011000000101000001010100110101001000000011010001010100110100110000010001110001')
+ser.write(b'00000000010010100100100101110100111011010000110010010101101000000101000010000010010100111000000010010100111000000000011000000101000001010100110101001000000011010001010100110100110000010001110001')
 
+# print("Did write, now read")
+# x = ser.readline()
+# print(x)
+print("Now starting loop")
 while True:
     try:
-        ser_bytes = ser.readline()
-        print(ser_bytes)
+        print("Writing to " + COM)
+        ser.write(b'00000000010010100100100101110100111011010000110010010101101000000101000010000010010100111000000010010100111000000000011000000101000001010100110101001000000011010001010100110100110000010001110001')
+        #ser.write("!AIVDM,1,1,,A,10`lQ3hP000EfQ@N7REv4?wF25B4,0*23".encode("utf-8"))
+
+
+        time.sleep(20)
+        # ser_bytes = ser.readline()
+        # print(ser_bytes)
     except:
         print("Keyboard Interrupt")
         break
