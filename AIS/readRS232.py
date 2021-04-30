@@ -7,7 +7,7 @@ DOS style end-of-line (<cr><lf>) for talking to AIS base stations
 '''
 EOL=DOS_EOL
 
-COM = "COM12"
+COM = "/dev/ttyUSB0"
 ser = serial.Serial(
     port=COM, baudrate=38400, bytesize=8, stopbits=serial.STOPBITS_ONE
 )
