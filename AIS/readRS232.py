@@ -9,7 +9,7 @@ EOL=DOS_EOL
 
 COM = "COM12"
 ser = serial.Serial(
-    port=COM, baudrate=38400, bytesize=8, stopbits=serial.STOPBITS_ONE
+    port="COM4", baudrate=38400, bytesize=8, stopbits=serial.STOPBITS_ONE
 )
 ser.flushInput()
 
