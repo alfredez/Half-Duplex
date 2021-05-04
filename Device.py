@@ -1,7 +1,8 @@
 import sys
 from decimal import Decimal
-from aisutils.BitVector import BitVector
 
+import bitstring
+from BitVector import BitVector
 from aisutils import aisstring
 from aisutils import binary
 from aisutils import uscg
@@ -53,6 +54,8 @@ def bbmEncode(totSent, sentNum, seqId, aisChan, msgId, data, numFillBits
         if validate: assert (len(r)) <= 81  # Max nmea string length
 
         return r
+
+
 
 def encode_BBM(params):
     '''Create a bin_broadcast binary message payload to pack into an AIS Msg bin_broadcast.
@@ -153,13 +156,16 @@ p1 = Device("AIS", "True Heading", "AIS Base Station", "COM4", 1)
 p1.getname()
 msgDict = {
     'MessageID': '8',
-    'RepeatIndicator': 1,
-    'UserID': 1193046,
+    'RepeatIndicator': 0,
+    'UserID': 244123459,
     'Spare': '0',
-    'dac': 366,
-    'fi': 42,
+    'dac': 1,
+    'fi': 10,
     'BinaryData': BitVector(
-        bitstring='110000101100000111100010010101001110111001101010011011111111100000110001011100001011111111101111111110011001000000010001110'),
+        textstring='THIS IS A TEST MESSAGE'),
 }
+
+
 test = encode_BBM(msgDict)
+print(BitVector(textstring='THIS IS A TEST MESSAGE'))
 print(bbmEncode(1,1,0,1,8,'THIS IS A TEST MESSAGE',0,appendEOL=False))

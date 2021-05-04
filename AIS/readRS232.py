@@ -9,7 +9,7 @@ EOL=DOS_EOL
 
 COM = "COM12"
 ser = serial.Serial(
-    port="COM4", baudrate=38400, bytesize=8, stopbits=serial.STOPBITS_ONE
+    port=COM, baudrate=38400, bytesize=8, stopbits=serial.STOPBITS_ONE
 )
 ser.flushInput()
 
@@ -29,7 +29,8 @@ while True:
         #ser.write(b'00000000010010100100100101110100111011010000110010010101101000000101000010000010010100111000000010010100111000000000011000000101000001010100110101001000000011010001010100110100110000010001110001')
         #ser.write("!AIBBM,1,1,0,0,8,04a@PU>0U>061@E=B0lE=<4LD,4*49"+EOL)
         #ser.write("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>061@E=@,4*16".encode("utf-8"))
-        ser.write("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C".encode("utf-8"))
+        #ser.write("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C".encode("utf-8"))
+        ser.write("'!xxBBM,1,1,0,3,8,7E3B3C3E7E,0*1D'".encode("utf-8"))
 
 
         time.sleep(10)
