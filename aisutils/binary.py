@@ -322,7 +322,7 @@ def test_encode():
 
 #assert (test_encode())
 
-def ais6tobitvec(str6):
+def ais6tobitvec(str6, pad):
     '''Convert an ITU AIS 6 bit string into a bit vector.  Each character
     represents 6 bits.  This is the NMEA !AIVD[MO] message payload.
 
@@ -386,7 +386,45 @@ def bitvectoais6(bv,doPadding=True):
             assert False
 
     #else: # No pad needed
-    for i in range(strLen):
+    for i in range(int(strLen)):
+        start = i*6
+        end = (i+1)*6
+        val = int(bv[start:end])
+        c = encode[val]
+        aisStrLst.append(c)
+
+    aisStr = ''.join(aisStrLst)
+
+    return aisStr, pad
+
+def bitvectoais8(bv,doPadding=True):
+    """Convert bit vector int an ITU AIS 6 bit string.  Each character represents 6 bits
+
+    @param bv: message bits (must be already stuffed)
+    @type bv: BitVector
+    @return: str6 ASCII that as it appears in the NMEA string
+    @rtype: str, pad
+
+    @todo: make a test base for needing padding
+    @bug: handle case when padding needed
+    """
+    pad = 8-(len(bv)%6)
+    if 8==pad: pad = 0
+    strLen = len(bv)/8
+    if pad>0: strLen+=1
+    aisStrLst = []
+
+    if pad!=0:
+        if doPadding:
+            print('pad befaore',len(bv))
+            bv = bv + BitVector(size=pad)
+            print('pad after',len(bv))
+        else:
+            print('ERROR: What are you doing with a non-align entity?  Let me pad it!')
+            assert False
+
+    #else: # No pad needed
+    for i in range(int(strLen)):
         start = i*6
         end = (i+1)*6
         val = int(bv[start:end])
