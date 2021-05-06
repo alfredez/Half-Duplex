@@ -50,6 +50,8 @@ class Interface:
     def list_i2c(self):
         for device in range(128):
             try:
+                msg = i2c_msg.write(self.addr, [64])
+                self.bus.i2c_rdwr(msg)
                 self.bus.read_byte(device)
                 print(hex(device))
             except:
