@@ -63,6 +63,7 @@ class Interface:
         # Write a single byte to address 80
         msg = i2c_msg.write(self.addr, data)
         self.bus.i2c_rdwr(msg)
+        print("data send")
 
     def read_i2c(self):
         # Read 64 bytes from address 80
