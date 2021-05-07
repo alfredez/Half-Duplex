@@ -44,6 +44,7 @@ if __name__ == "__main__":
     # ais.check_connection_rs232()
 
     lora = Device("LoRaWAN Transponder1", "PyCom", "FiPy", 0)
+    lora.init_i2c()
     lora.addr = 0x04
     lora.list_i2c()
 
