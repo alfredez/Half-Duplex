@@ -53,7 +53,7 @@ class Interface:
                 msg = i2c_msg.write(device, [64])
                 self.bus.i2c_rdwr(msg)
                 self.bus.read_byte(device)
-                print(hex(device))
+                print(device)
             except:
                 print("No device connected to bus")
                 pass
@@ -63,6 +63,7 @@ class Interface:
         # Write a single byte to address 80
         msg = i2c_msg.write(self.addr, data)
         self.bus.i2c_rdwr(msg)
+        self.bus.close()
         print("data send")
 
     def read_i2c(self):

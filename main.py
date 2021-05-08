@@ -45,12 +45,14 @@ if __name__ == "__main__":
 
     lora = Device("LoRaWAN Transponder1", "PyCom", "FiPy", 0)
     lora.init_i2c()
-    lora.addr = 0x04
-    lora.list_i2c()
+    lora.addr = 4
+    #lora.list_i2c()
 
-    while True:
-        lora.write_i2c()
-        time.sleep(5)
+#    while True:
+#        lora.write_i2c()
+#        time.sleep(5)
+    lora.write_i2c()
+
 
 
     # f1 = Folder('./correct/')
