@@ -58,10 +58,11 @@ class Interface:
                 print("No device connected to bus")
                 pass
 
-    def write_i2c(self, data):
+    def write_i2c(self, data, type):
         # Write a single byte to address 80
         buff = []
         buff.append(data)
+        buff.append(type)
         msg = i2c_msg.write(self.addr, buff)
         self.bus.i2c_rdwr(msg)
         print("data send")

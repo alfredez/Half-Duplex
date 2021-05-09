@@ -26,9 +26,10 @@ class MonitorFolder(PatternMatchingEventHandler):
 
         self.folder.files.append(newfile)
         newfile.setlines(self.folder.path)
-        dabid = newfile.check_dab_id()
+        dabid = newfile.get_dab_id()
+        msgtype = newfile.get_msg_type()
         print(dabid)
-        self.acknowledge(dabid)
+        self.acknowledge(dabid, msgtype)
         # msg = ais.encode_BBM(dabid)
         # ais.write_rs232(msg)
 
@@ -40,7 +41,7 @@ class MonitorFolder(PatternMatchingEventHandler):
             if os.path.getsize(src_path) > self.FILE_SIZE:
                 print("very big file")
 
-    def acknowledge(self, id):
+    def acknowledge(self, id, type):
         list_devices = devices
         for d in list_devices:
             if d.type == 0:
@@ -51,7 +52,7 @@ class MonitorFolder(PatternMatchingEventHandler):
                     pass
             elif d.type == 1:
                 try:
-                    d.write_i2c(id)
+                    d.write_i2c(id, type)
                 except:
                     print("Could not send with: %s", d.name)
                     pass

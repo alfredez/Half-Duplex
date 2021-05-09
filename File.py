@@ -17,5 +17,11 @@ class File:
                 mylines.append(myline)  # add its contents to mylines.
         self.lines = mylines
 
-    def check_dab_id(self):
+    def get_dab_id(self):
         return int(self.lines[0])
+
+    def get_msg_type(self):
+        return int(self.lines[1])
+
+    def get_coordinates(self):
+        return self.lines[2], self.lines[3]
