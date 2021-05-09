@@ -2,21 +2,25 @@ import os
 import sys
 import time
 from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+from watchdog.events import PatternMatchingEventHandler
 
 from Device import Device
 from Folder import Folder
 from File import File
+import time
 
 
-class MonitorFolder(FileSystemEventHandler):
+class MonitorFolder(PatternMatchingEventHandler):
     FILE_SIZE = 1000
 
     def __init__(self, folder):
+        # Set the patterns for PatternMatchingEventHandler
+        PatternMatchingEventHandler.__init__(self, patterns=['*.txt'], ignore_directories=True, case_sensitive=False)
         self.folder = folder
 
     def on_created(self, event):
         print(event.src_path, event.event_type)
+        time.sleep(1)
         #self.checkFolderSize(event.src_path)
         newfile = File(str(event.src_path).replace(self.folder.path, ""))
 
@@ -62,10 +66,10 @@ class MonitorFolder(FileSystemEventHandler):
 
 if __name__ == "__main__":
 
-    ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
-    ais.setport("/dev/ttyUSB0")
-    ais.init_serial(38400)
-    ais.check_connection_rs232()
+    # ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
+    # ais.setport("/dev/ttyUSB0")
+    # ais.init_serial(38400)
+    # ais.check_connection_rs232()
 
     devices = []
     lora = Device("LoRaWAN Transponder1", "PyCom", "FiPy", 1)
@@ -73,7 +77,7 @@ if __name__ == "__main__":
     lora.addr = 4
     #lora.list_i2c()
 
-    devices.append(ais)
+    #devices.append(ais)
     devices.append(lora)
 #    while True:
 #        lora.write_i2c()
@@ -85,13 +89,13 @@ if __name__ == "__main__":
     observer = Observer()
     observer.schedule(event_handler, path=event_handler.folder.path, recursive=True)
 
-
-    print("Monitoring started")
     observer.start()
+    print("Monitoring started")
     try:
         while (True):
             time.sleep(1)
 
     except KeyboardInterrupt:
         observer.stop()
-        observer.join()
+        print("Monitoring Stopped")
+    observer.join()
