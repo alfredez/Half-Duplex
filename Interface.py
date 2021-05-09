@@ -60,7 +60,9 @@ class Interface:
 
     def write_i2c(self, data):
         # Write a single byte to address 80
-        msg = i2c_msg.write(self.addr, data)
+        buff = []
+        buff.append(data)
+        msg = i2c_msg.write(self.addr, buff)
         self.bus.i2c_rdwr(msg)
         print("data send")
 
