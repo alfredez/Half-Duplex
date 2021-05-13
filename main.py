@@ -24,9 +24,9 @@ class Monitor(PatternMatchingEventHandler):
         new_file = File(str(event.src_path).replace(self.folder.path, ""))
 
         self.folder.files.append(new_file)
-        new_file.setlines(self.folder.path)
+        new_file.set_lines(self.folder.path)
         dab_id = new_file.get_dab_id()
-        message_type = new_file.get_msg_type()
+        message_type = new_file.get_message_type()
         print(dab_id)
         self.acknowledge(dab_id, message_type)
 
@@ -38,32 +38,31 @@ class Monitor(PatternMatchingEventHandler):
     #         if os.path.getsize(src_path) > self.FILE_SIZE:
     #             print("very big file")
 
-    def acknowledge(self, id, type):
-        list_devices = devices
-        for d in list_devices:
-            if d.type == 0:
+    def acknowledge(self, dab_id, message_type):
+        for d in devices:
+            if d.interface == 0:
                 try:
                     d.write_rs232("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C")
                 except:
-                    print("Could not send with: %s", d.name)
+                    print("Could not send with: ", d.name)
                     pass
-            elif d.type == 1:
+            elif d.interface == 1:
                 try:
-                    d.write_i2c(id, type)
+                    d.write_i2c(dab_id, message_type)
                 except:
-                    print("Could not send with: %s", d.name)
+                    print("Could not send with: ", d.name)
                     pass
-            elif d.type == 2:
+            elif d.interface == 2:
                 try:
                     d.write_socket("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C")
                 except:
-                    print("Could not send with: %s", d.name)
+                    print("Could not send with: ", d.name)
                     pass
-            elif d.type == 3:
+            elif d.interface == 3:
                 try:
-                    d.write_spi(id, type)
+                    d.write_spi(dab_id, message_type)
                 except:
-                    print("Could not send with: %s", d.name)
+                    print("Could not send with: ", d.name)
                     pass
 
 

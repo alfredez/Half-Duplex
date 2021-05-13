@@ -3,19 +3,36 @@ from Interface import Interface
 
 
 class Device(Interface):
-    def __init__(self, name, branch, model, type):
-        super().__init__(name, type)
+    def __init__(self, name, branch, model, interface):
+        super().__init__(name, interface)
         self.name = name
         self.branch = branch
         self.model = model
-        self.binarydata = 0
-        self.status = 0
-        self.type = type
-        #self.intf = interf.Interface(name, type)
+        self.interface = interface
 
+    def get_name(self):
+        return self.name
 
-    def getname(self):
-        print("Wireless device name " + self.name)
+    def set_name(self, new_name):
+        self.name = new_name
+
+    def get_branch(self):
+        return self.branch
+
+    def set_branch(self, new_branch):
+        self.branch = new_branch
+
+    def get_model(self):
+        return self.model
+
+    def set_model(self, new_model):
+        self.model = new_model
+
+    def get_interface(self):
+        return self.interface
+
+    def set_interface(self, new_interface):
+        self.interface = new_interface
 
     def encode_BBM(self, data):
         if data == 0:

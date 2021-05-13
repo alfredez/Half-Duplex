@@ -4,6 +4,7 @@ import spidev
 from smbus2 import SMBus, i2c_msg
 import socket
 
+
 class Interface:
     def __init__(self, name, type):
         self.name = name
