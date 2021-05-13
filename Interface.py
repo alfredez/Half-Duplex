@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import serial
+import spidev
 from smbus2 import SMBus, i2c_msg
 import socket
 
@@ -14,6 +15,7 @@ class Interface:
         self.s = socket.socket()
         self.ip = ""
         self.socket_port = 0
+        self.spi = spi = spidev.SpiDev()
 
     def getport(self):
         return self.port
@@ -40,6 +42,13 @@ class Interface:
         self.ip = IP
         self.socket_port = PORT
         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    def init_spi(self, spi_bus, spi_device):
+        self.spi.open(spi_bus, spi_device)
+        self.spi.max_speed_hz = 1000000
+
+    def close_spi(self):
+        self.spi.close()
 
     def connect_socket(self):
         self.s.connect((self.ip, self.socket_port))
@@ -112,3 +121,16 @@ class Interface:
     def read_socket(self):
         data, addr = self.s.recvfrom(4096)
         return data, addr
+
+    def write_spi(self, data, type):
+        # Write a single byte to address 80
+        buff = []
+        buff.append(data)
+        buff.append(type)
+        self.spi.writebytes([buff])
+        print("data send")
+
+    def read_spi(self):
+        # Read 64 bytes from address 80
+        msg = self.spi.readbytes(64)
+        return msg

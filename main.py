@@ -10,7 +10,7 @@ from File import File
 import time
 
 
-class MonitorFolder(PatternMatchingEventHandler):
+class Monitor(PatternMatchingEventHandler):
     FILE_SIZE = 1000
 
     def __init__(self, folder):
@@ -21,25 +21,22 @@ class MonitorFolder(PatternMatchingEventHandler):
     def on_created(self, event):
         print(event.src_path, event.event_type)
         time.sleep(1)
-        #self.checkFolderSize(event.src_path)
-        newfile = File(str(event.src_path).replace(self.folder.path, ""))
+        new_file = File(str(event.src_path).replace(self.folder.path, ""))
 
-        self.folder.files.append(newfile)
-        newfile.setlines(self.folder.path)
-        dabid = newfile.get_dab_id()
-        msgtype = newfile.get_msg_type()
-        print(dabid)
-        self.acknowledge(dabid, msgtype)
-        # msg = ais.encode_BBM(dabid)
-        # ais.write_rs232(msg)
+        self.folder.files.append(new_file)
+        new_file.setlines(self.folder.path)
+        dab_id = new_file.get_dab_id()
+        message_type = new_file.get_msg_type()
+        print(dab_id)
+        self.acknowledge(dab_id, message_type)
 
-    def checkFolderSize(self, src_path):
-        if os.path.isdir(src_path):
-            if os.path.getsize(src_path) > self.FILE_SIZE:
-                print("Time to backup the dir")
-        else:
-            if os.path.getsize(src_path) > self.FILE_SIZE:
-                print("very big file")
+    # def checkFolderSize(self, src_path):
+    #     if os.path.isdir(src_path):
+    #         if os.path.getsize(src_path) > self.FILE_SIZE:
+    #             print("Time to backup the dir")
+    #     else:
+    #         if os.path.getsize(src_path) > self.FILE_SIZE:
+    #             print("very big file")
 
     def acknowledge(self, id, type):
         list_devices = devices
@@ -59,6 +56,12 @@ class MonitorFolder(PatternMatchingEventHandler):
             elif d.type == 2:
                 try:
                     d.write_socket("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C")
+                except:
+                    print("Could not send with: %s", d.name)
+                    pass
+            elif d.type == 3:
+                try:
+                    d.write_spi(id, type)
                 except:
                     print("Could not send with: %s", d.name)
                     pass
@@ -84,9 +87,9 @@ if __name__ == "__main__":
 #        lora.write_i2c()
 #        time.sleep(5)
 
-    f1 = Folder('./correct/')
+    dab_folder = Folder('./correct/')
 
-    event_handler = MonitorFolder(f1)
+    event_handler = Monitor(dab_folder)
     observer = Observer()
     observer.schedule(event_handler, path=event_handler.folder.path, recursive=True)
 
