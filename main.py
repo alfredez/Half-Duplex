@@ -84,19 +84,19 @@ class Monitor(PatternMatchingEventHandler):
 
 if __name__ == "__main__":
 
-    ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
-    ais.set_port("/dev/ttyUSB0")
-    ais.init_serial("/dev/ttyUSB0", 38400)
-    ais.check_connection_rs232()
+    # ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
+    # ais.set_port("/dev/ttyUSB0")
+    # ais.init_serial("/dev/ttyUSB0", 38400)
+    # ais.check_connection_rs232()
 
     devices = []
-    # lora = Device("LoRaWAN Transponder1", "PyCom", "FiPy", 1)
-    # lora.init_i2c(4)
+    lora = Device("LoRaWAN Transponder1", "Sodaq", "One", 1)
+    lora.init_i2c(4)
     # lora.addr = 4
     #lora.list_i2c()
 
-    devices.append(ais)
-    #devices.append(lora)
+    #devices.append(ais)
+    devices.append(lora)
 #    while True:
 #        lora.write_i2c()
 #        time.sleep(5)
