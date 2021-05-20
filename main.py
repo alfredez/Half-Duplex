@@ -3,6 +3,10 @@ import sys
 import time
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
+from aisutils import nmea
+from aisutils import BitVector
+from aisutils import binary
+
 
 from Device import Device
 from Folder import Folder
@@ -42,46 +46,57 @@ class Monitor(PatternMatchingEventHandler):
         for d in devices:
             if d.interface == 0:
                 try:
-                    d.write_rs232("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C")
-                except:
-                    print("Could not send with: ", d.name)
+                    if message_type == 4:
+                        msg = '  ACK:' + str(dab_id) + ',MSG:' + str(message_type) + ',RSSI:122,SNR:-1'
+                        aisBits = BitVector.BitVector(textstring=msg)
+                        payloadStr, pad = binary.bitvectoais6(aisBits)  # [0]
+                        buffer = nmea.bbmEncode(1, 1, 0, 1, 8, payloadStr, pad, appendEOL=False)
+                        d.write_rs232(buffer)
+                    else:
+                        msg = '  ACK:' + str(dab_id) + ',MSG:' + str(message_type) + ''
+                        aisBits = BitVector.BitVector(textstring=msg)
+                        payloadStr, pad = binary.bitvectoais6(aisBits)  # [0]
+                        buffer = nmea.bbmEncode(1, 1, 0, 1, 8, payloadStr, pad, appendEOL=False)
+                        d.write_rs232(buffer)
+
+                except ("There is no connection with: %s" % d.name):
+                    print("Could not send with: %s" % d.name)
                     pass
             elif d.interface == 1:
                 try:
                     d.write_i2c(dab_id, message_type)
-                except:
-                    print("Could not send with: ", d.name)
+                except ("There is no connection with: %s" % d.name):
+                    print("Could not send with: %s" % d.name)
                     pass
             elif d.interface == 2:
                 try:
                     d.write_socket("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C")
-                except:
-                    print("Could not send with: ", d.name)
+                except ("There is no connection with: %s" % d.name):
+                    print("Could not send with: %s" % d.name)
                     pass
             elif d.interface == 3:
                 try:
                     d.write_spi(dab_id, message_type)
-                except:
-                    print("Could not send with: ", d.name)
+                except ("There is no connection with: %s" % d.name):
+                    print("Could not send with: %s" % d.name)
                     pass
-
 
 
 if __name__ == "__main__":
 
-    # ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
-    # ais.setport("/dev/ttyUSB0")
-    # ais.init_serial(38400)
-    # ais.check_connection_rs232()
+    ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
+    ais.set_port("/dev/ttyUSB0")
+    ais.init_serial("/dev/ttyUSB0", 38400)
+    ais.check_connection_rs232()
 
     devices = []
-    lora = Device("LoRaWAN Transponder1", "PyCom", "FiPy", 1)
-    lora.init_i2c()
-    lora.addr = 4
+    # lora = Device("LoRaWAN Transponder1", "PyCom", "FiPy", 1)
+    # lora.init_i2c(4)
+    # lora.addr = 4
     #lora.list_i2c()
 
-    #devices.append(ais)
-    devices.append(lora)
+    devices.append(ais)
+    #devices.append(lora)
 #    while True:
 #        lora.write_i2c()
 #        time.sleep(5)
