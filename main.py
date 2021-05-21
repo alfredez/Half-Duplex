@@ -101,7 +101,7 @@ if __name__ == "__main__":
 #        lora.write_i2c()
 #        time.sleep(5)
 
-    dab_folder = Folder('./correct/')
+    dab_folder = Folder(os.path.expanduser("~/.dab/received-messages"))
 
     event_handler = Monitor(dab_folder)
     observer = Observer()
