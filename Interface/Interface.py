@@ -1,16 +1,23 @@
 #!/usr/bin/python
-from .I2C import I2C
-from .Ethernet import Ethernet
-from .RS232 import RS232
-from .SPI import SPI
+from I2C import I2C
+from Ethernet import Ethernet
+from RS232 import RS232
+from SPI import SPI
 
 
 class Interface:
-    def __init__(self):
-        self.rs232 = RS232()
-        self.i2c = I2C()
-        self.ethernet = Ethernet()
-        self.spi = SPI()
+    def __init__(self, interface_type):
+
+        self.interface_type = interface_type
+
+        if self.interface_type == 0:
+            self.rs232 = RS232()
+        elif self.interface_type == 1:
+            self.i2c = I2C()
+        elif self.interface_type == 2:
+            self.ethernet = Ethernet()
+        elif self.interface_type == 3:
+            self.spi = SPI()
 
     def get_rs232_settings(self):
         return vars(self.rs232)
@@ -23,3 +30,7 @@ class Interface:
 
     def get_spi_settings(self):
         return vars(self.spi)
+
+ift = Interface()
+test = ift.get_i2c_settings()
+print(test)

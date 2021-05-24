@@ -3,12 +3,11 @@ from Interface.Interface import Interface
 
 
 class Device(Interface):
-    def __init__(self, name, branch, model, interface):
-        super().__init__()
+    def __init__(self, name, branch, model, interface_type):
+        super().__init__(interface_type)
         self.name = name
         self.branch = branch
         self.model = model
-        self.interface = interface
 
     def get_name(self):
         return self.name
@@ -29,10 +28,10 @@ class Device(Interface):
         self.model = new_model
 
     def get_interface(self):
-        return self.interface
+        return self.type
 
     def set_interface(self, new_interface):
-        self.interface = new_interface
+        self.type = new_interface
 
     def encode_BBM(self, data):
         if data == 0:

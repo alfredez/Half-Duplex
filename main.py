@@ -44,7 +44,7 @@ class Monitor(PatternMatchingEventHandler):
 
     def acknowledge(self, dab_id, message_type):
         for d in devices:
-            if d.interface == 0:
+            if d.interface_type == 0:
                 try:
                     if message_type == 4:
                         msg = '  ACK:' + str(dab_id) + ',MSG:' + str(message_type) + ',RSSI:122,SNR:-1'
@@ -62,19 +62,19 @@ class Monitor(PatternMatchingEventHandler):
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
-            elif d.interface == 1:
+            elif d.interface_type == 1:
                 try:
                     d.i2c.write_i2c(dab_id, message_type)
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
-            elif d.interface == 2:
+            elif d.interface_type == 2:
                 try:
                     d.ethernet.write_socket("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C")
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
-            elif d.interface == 3:
+            elif d.interface_type == 3:
                 try:
                     d.spi.write_spi(dab_id, message_type)
                 except ("There is no connection with: %s" % d.name):
