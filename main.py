@@ -1,6 +1,7 @@
 import os
 import sys
-import time
+import argparse
+import csv
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 from aisutils import nmea
@@ -84,17 +85,61 @@ class Monitor(PatternMatchingEventHandler):
 
 if __name__ == "__main__":
 
+    # create parser
+    parser = argparse.ArgumentParser()
+
+    # add arguments to the parser
+    parser.add_argument("devices")
+
+    # parse the arguments
+    args = parser.parse_args()
+
     devices = []
+
+    with open(args.devices, mode='r') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                print(f'Column names are {", ".join(row)}')
+                line_count += 1
+
+            if int(row["interface_type"]) == 0:
+                print(row["name"])
+                ais = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
+                ais.rs232.init_serial(row["address"], row["setting"])
+                devices.append(ais)
+
+            if int(row["interface_type"]) == 1:
+                print(row["name"])
+                lora = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
+                lora.i2c.init_i2c(row["address"])
+                devices.append(lora)
+
+            if int(row["interface_type"]) == 2:
+                print(row["name"])
+                lan = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
+                lan.ethernet.init_socket(row["address"], row["setting"])
+                devices.append(lan)
+
+            if int(row["interface_type"]) == 3:
+                print(row["name"])
+                lora2 = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
+                lora2.spi.init_spi(row["address"], row["setting"])
+                devices.append(lora2)
+            line_count += 1
+        print(f'Processed {line_count} lines.')
+
     # ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
     # ais.set_port("/dev/ttyUSB0")
     # ais.init_serial("/dev/ttyUSB0", 38400)
     # ais.check_connection_rs232()
 
-    lora = Device("LoRaWAN Transponder1", "Sodaq", "One", 1)
-    lora.i2c.init_i2c(4)
+    # lora = Device("LoRaWAN Transponder1", "Sodaq", "One", 1)
+    # lora.i2c.init_i2c(4)
 
     #devices.append(ais)
-    devices.append(lora)
+    #devices.append(lora)
 
     #dab_folder = Folder(os.path.expanduser("~/.dab/received-messages"))
     dab_folder = Folder(os.path.expanduser("./correct"))

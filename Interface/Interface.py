@@ -1,8 +1,8 @@
 #!/usr/bin/python
-from I2C import I2C
-from Ethernet import Ethernet
-from RS232 import RS232
-from SPI import SPI
+from .I2C import I2C
+from .Ethernet import Ethernet
+from .RS232 import RS232
+from .SPI import SPI
 
 
 class Interface:
@@ -30,7 +30,3 @@ class Interface:
 
     def get_spi_settings(self):
         return vars(self.spi)
-
-ift = Interface()
-test = ift.get_i2c_settings()
-print(test)
