@@ -1,10 +1,10 @@
 #!/usr/bin/python
-from Interface import Interface
+from Interface.Interface import Interface
 
 
 class Device(Interface):
     def __init__(self, name, branch, model, interface):
-        super().__init__(name, interface)
+        super().__init__()
         self.name = name
         self.branch = branch
         self.model = model

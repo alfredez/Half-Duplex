@@ -51,32 +51,32 @@ class Monitor(PatternMatchingEventHandler):
                         aisBits = BitVector.BitVector(textstring=msg)
                         payloadStr, pad = binary.bitvectoais6(aisBits)  # [0]
                         buffer = nmea.bbmEncode(1, 1, 0, 1, 8, payloadStr, pad, appendEOL=False)
-                        d.write_rs232(buffer)
+                        d.rs232.write_rs232(buffer)
                     else:
                         msg = '  ACK:' + str(dab_id) + ',MSG:' + str(message_type) + ''
                         aisBits = BitVector.BitVector(textstring=msg)
                         payloadStr, pad = binary.bitvectoais6(aisBits)  # [0]
                         buffer = nmea.bbmEncode(1, 1, 0, 1, 8, payloadStr, pad, appendEOL=False)
-                        d.write_rs232(buffer)
+                        d.rs232.write_rs232(buffer)
 
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
             elif d.interface == 1:
                 try:
-                    d.write_i2c(dab_id, message_type)
+                    d.i2c.write_i2c(dab_id, message_type)
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
             elif d.interface == 2:
                 try:
-                    d.write_socket("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C")
+                    d.ethernet.write_socket("!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C")
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
             elif d.interface == 3:
                 try:
-                    d.write_spi(dab_id, message_type)
+                    d.spi.write_spi(dab_id, message_type)
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
@@ -84,24 +84,20 @@ class Monitor(PatternMatchingEventHandler):
 
 if __name__ == "__main__":
 
+    devices = []
     # ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
     # ais.set_port("/dev/ttyUSB0")
     # ais.init_serial("/dev/ttyUSB0", 38400)
     # ais.check_connection_rs232()
 
-    devices = []
     lora = Device("LoRaWAN Transponder1", "Sodaq", "One", 1)
-    lora.init_i2c(4)
-    # lora.addr = 4
-    #lora.list_i2c()
+    lora.i2c.init_i2c(4)
 
     #devices.append(ais)
     devices.append(lora)
-#    while True:
-#        lora.write_i2c()
-#        time.sleep(5)
 
-    dab_folder = Folder(os.path.expanduser("~/.dab/received-messages"))
+    #dab_folder = Folder(os.path.expanduser("~/.dab/received-messages"))
+    dab_folder = Folder(os.path.expanduser("~/correct"))
 
     event_handler = Monitor(dab_folder)
     observer = Observer()
