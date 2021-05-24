@@ -107,25 +107,25 @@ if __name__ == "__main__":
             if int(row["interface_type"]) == 0:
                 print(row["name"])
                 ais = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
-                ais.rs232.init_serial(row["address"], row["setting"])
+                ais.rs232.init_serial(row["address"], int(row["setting"]))
                 devices.append(ais)
 
             if int(row["interface_type"]) == 1:
                 print(row["name"])
                 lora = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
-                lora.i2c.init_i2c(row["address"])
+                lora.i2c.init_i2c(int(row["address"]))
                 devices.append(lora)
 
             if int(row["interface_type"]) == 2:
                 print(row["name"])
                 lan = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
-                lan.ethernet.init_socket(row["address"], row["setting"])
+                lan.ethernet.init_socket(row["address"], int(row["setting"]))
                 devices.append(lan)
 
             if int(row["interface_type"]) == 3:
                 print(row["name"])
                 lora2 = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
-                lora2.spi.init_spi(row["address"], row["setting"])
+                lora2.spi.init_spi(int(row["address"]), int(row["setting"]))
                 devices.append(lora2)
             line_count += 1
         print(f'Processed {line_count} lines.')
