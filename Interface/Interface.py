@@ -1,8 +1,8 @@
 #!/usr/bin/python
-from I2C import I2C
-from Ethernet import Ethernet
-from RS232 import RS232
-from SPI import SPI
+from .I2C import I2C
+from .Ethernet import Ethernet
+from .RS232 import RS232
+from .SPI import SPI
 
 
 class Interface:

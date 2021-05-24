@@ -97,7 +97,7 @@ if __name__ == "__main__":
     devices.append(lora)
 
     #dab_folder = Folder(os.path.expanduser("~/.dab/received-messages"))
-    dab_folder = Folder(os.path.expanduser("~/correct"))
+    dab_folder = Folder(os.path.expanduser("./correct"))
 
     event_handler = Monitor(dab_folder)
     observer = Observer()
