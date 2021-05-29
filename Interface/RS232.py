@@ -8,7 +8,6 @@ class RS232:
         self.port = ""
         self.baudrate = 0
         self.ser = Serial()
-        self.type = 0
 
     def get_port(self):
         return self.port
@@ -22,12 +21,6 @@ class RS232:
     def set_baudrate(self, new_baudrate):
         self.baudrate = new_baudrate
 
-    def get_addr(self):
-        return self.addr
-
-    def set_addr(self, new_addr):
-        self.addr = new_addr
-
     def init_serial(self, port, baudrate):
         self.port = port
         self.baudrate = baudrate
@@ -37,33 +30,21 @@ class RS232:
         self.ser.flush()
 
     def check_connection_rs232(self):
-        if self.type == 0:
-            print("Serial is open: " + str(self.ser.isOpen()))
-            return True
-        elif self.type == 1:
-            #print("Bus is open: " + str(self.ser.isOpen()))
-            return True
-        else:
-            return False
+        print("Serial is open: " + str(self.ser.isOpen()))
+        return self.ser.isOpen()
 
     def open_rs232(self):
-        if self.type == 0:
-            self.ser.open()
-            print("Serial is open: " + str(self.ser.isOpen()))
-            return True
+        self.ser.open()
+        return self.ser.isOpen()
 
     def close_rs232(self):
-        if self.type == 0:
-            self.ser.close()
-            print("Is still open " + str(self.ser.isOpen()))
-            return True
+        self.ser.close()
+        return self.ser.isOpen()
 
     def write_rs232(self, msg):
-        if self.type == 0:
-            self.ser.write(str(msg).encode("utf-8")) #"!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C"
-            print("send: %s", msg)
+        self.ser.write(str(msg).encode("utf-8")) #"!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C"
+        print("send: %s", msg)
 
     def read_rs232(self):
-        if self.type == 0:
-            msg = self.ser.readline()
-            return msg
+        msg = self.ser.readline()
+        return msg

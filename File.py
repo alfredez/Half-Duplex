@@ -23,5 +23,5 @@ class File:
         return self.message_type
 
     def get_coordinates(self):
-        return self.lines[2], self.lines[3]
+        return float(self.lines[2]), float(self.lines[3])
 

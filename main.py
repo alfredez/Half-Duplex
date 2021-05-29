@@ -16,7 +16,6 @@ import time
 
 
 class Monitor(PatternMatchingEventHandler):
-    FILE_SIZE = 1000
 
     def __init__(self, folder):
         # Set the patterns for PatternMatchingEventHandler
@@ -34,14 +33,6 @@ class Monitor(PatternMatchingEventHandler):
         message_type = new_file.get_message_type()
         print(dab_id)
         self.acknowledge(dab_id, message_type)
-
-    # def checkFolderSize(self, src_path):
-    #     if os.path.isdir(src_path):
-    #         if os.path.getsize(src_path) > self.FILE_SIZE:
-    #             print("Time to backup the dir")
-    #     else:
-    #         if os.path.getsize(src_path) > self.FILE_SIZE:
-    #             print("very big file")
 
     def acknowledge(self, dab_id, message_type):
         for d in devices:
@@ -83,20 +74,10 @@ class Monitor(PatternMatchingEventHandler):
                     pass
 
 
-if __name__ == "__main__":
+def attach_devices(csv_parameter):
+    listed_devices = []
 
-    # create parser
-    parser = argparse.ArgumentParser()
-
-    # add arguments to the parser
-    parser.add_argument("devices")
-
-    # parse the arguments
-    args = parser.parse_args()
-
-    devices = []
-
-    with open(args.devices, mode='r') as csv_file:
+    with open(csv_parameter, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
         for row in csv_reader:
@@ -108,27 +89,41 @@ if __name__ == "__main__":
                 print(row["name"])
                 ais = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
                 ais.rs232.init_serial(row["address"], int(row["setting"]))
-                devices.append(ais)
+                listed_devices.append(ais)
 
             if int(row["interface_type"]) == 1:
                 print(row["name"])
                 lora = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
                 lora.i2c.init_i2c(int(row["address"]))
-                devices.append(lora)
+                listed_devices.append(lora)
 
             if int(row["interface_type"]) == 2:
                 print(row["name"])
                 lan = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
                 lan.ethernet.init_socket(row["address"], int(row["setting"]))
-                devices.append(lan)
+                listed_devices.append(lan)
 
             if int(row["interface_type"]) == 3:
                 print(row["name"])
                 lora2 = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
                 lora2.spi.init_spi(int(row["address"]), int(row["setting"]))
-                devices.append(lora2)
+                listed_devices.append(lora2)
             line_count += 1
         print(f'Processed {line_count} lines.')
+    return listed_devices
+
+
+if __name__ == "__main__":
+
+    # create parser
+    parser = argparse.ArgumentParser()
+
+    # add arguments to the parser
+    parser.add_argument("devices")
+    parser.add_argument("folder")
+
+    # parse the arguments
+    args = parser.parse_args()
 
     # ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
     # ais.set_port("/dev/ttyUSB0")
@@ -145,6 +140,7 @@ if __name__ == "__main__":
     dab_folder = Folder(os.path.expanduser("./correct"))
 
     event_handler = Monitor(dab_folder)
+    devices = attach_devices(args.devices)
     observer = Observer()
     observer.schedule(event_handler, path=event_handler.folder.path, recursive=True)
 

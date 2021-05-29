@@ -6,6 +6,12 @@ class I2C:
         self.address = 0
         self.bus = SMBus()
 
+    def get_address(self):
+        return self.address
+
+    def set_address(self, new_address):
+        self.address = new_address
+
     def init_i2c(self, address):
         self.address = address
         self.bus = SMBus(1)
@@ -21,11 +27,11 @@ class I2C:
                 print("No device connected to bus")
                 pass
 
-    def write_i2c(self, data, type):
+    def write_i2c(self, data, message_type):
         # Write a single byte to address 80
         buff = []
         buff.append(data)
-        buff.append(type)
+        buff.append(message_type)
         msg = i2c_msg.write(self.address, buff)
         self.bus.i2c_rdwr(msg)
         print("data send")

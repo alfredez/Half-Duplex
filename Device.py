@@ -28,20 +28,12 @@ class Device(Interface):
         self.model = new_model
 
     def get_interface(self):
-        return self.type
+        return self.interface_type
 
     def set_interface(self, new_interface):
-        self.type = new_interface
+        self.interface_type = new_interface
 
-    def encode_BBM(self, data):
-        if data == 0:
-            ebbm = "!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C"
-            return ebbm
-        else:
-            return ""
 
-    # def encode_ABM(self):
-    #     print("Wireless device port " + self.port)
 
 '''
 AIS device with interface

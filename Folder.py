@@ -23,9 +23,9 @@ class Folder:
     #     self.files = files
 
 
-f1 = Folder('./correct/')
-# rl = f1.readlines()
-# dabid = f1.check_dab_id(rl)
-f1.get_list_files()
-f1.get_list_files()
+# f1 = Folder('./correct/')
+# # rl = f1.readlines()
+# # dabid = f1.check_dab_id(rl)
+# f1.get_list_files()
+# f1.get_list_files()
 

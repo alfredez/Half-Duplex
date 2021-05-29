@@ -7,6 +7,18 @@ class SPI:
         self.spi_bus = 0
         self.spi_device = 0
 
+    def get_spi_bus(self):
+        return self.spi_bus
+
+    def set_spi_bus(self, new_spi_bus):
+        self.spi_bus = new_spi_bus
+
+    def get_spi_device(self):
+        return self.spi_device
+
+    def set_spi_device(self, new_spi_device):
+        self.spi_device = new_spi_device
+
     def init_spi(self, spi_bus, spi_device):
         self.spi_bus = spi_bus
         self.spi_device = spi_device
