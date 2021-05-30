@@ -21,6 +21,7 @@ class Monitor(PatternMatchingEventHandler):
         # Set the patterns for PatternMatchingEventHandler
         PatternMatchingEventHandler.__init__(self, patterns=['*.txt'], ignore_directories=True, case_sensitive=False)
         self.folder = folder
+        self.devices = []
 
     def on_created(self, event):
         print(event.src_path, event.event_type)
@@ -35,7 +36,7 @@ class Monitor(PatternMatchingEventHandler):
         self.acknowledge(dab_id, message_type)
 
     def acknowledge(self, dab_id, message_type):
-        for d in devices:
+        for d in self.devices:
             if d.interface_type == 0:
                 try:
                     if message_type == 4:
@@ -72,6 +73,48 @@ class Monitor(PatternMatchingEventHandler):
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
+
+
+def execute():
+    # create parser
+    parser = argparse.ArgumentParser()
+
+    # add arguments to the parser
+    parser.add_argument("devices")
+    parser.add_argument("folder")
+
+    # parse the arguments
+    args = parser.parse_args()
+
+    # ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
+    # ais.set_port("/dev/ttyUSB0")
+    # ais.init_serial("/dev/ttyUSB0", 38400)
+    # ais.check_connection_rs232()
+
+    # lora = Device("LoRaWAN Transponder1", "Sodaq", "One", 1)
+    # lora.i2c.init_i2c(4)
+
+    #devices.append(ais)
+    #devices.append(lora)
+
+    #dab_folder = Folder(os.path.expanduser("~/.dab/received-messages"))
+    dab_folder = Folder(os.path.expanduser("./correct"))
+
+    event_handler = Monitor(dab_folder)
+    observer = Observer()
+    observer.schedule(event_handler, path=event_handler.folder.path, recursive=True)
+    event_handler.devices = attach_devices(args.devices)
+
+    observer.start()
+    print("Monitoring started")
+    try:
+        while (True):
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        observer.stop()
+        print("Monitoring Stopped")
+    observer.join()
 
 
 def attach_devices(csv_parameter):
@@ -114,43 +157,4 @@ def attach_devices(csv_parameter):
 
 
 if __name__ == "__main__":
-
-    # create parser
-    parser = argparse.ArgumentParser()
-
-    # add arguments to the parser
-    parser.add_argument("devices")
-    parser.add_argument("folder")
-
-    # parse the arguments
-    args = parser.parse_args()
-
-    # ais = Device("AIS Transponder1", "True Heading", "AIS Base Station", 0)
-    # ais.set_port("/dev/ttyUSB0")
-    # ais.init_serial("/dev/ttyUSB0", 38400)
-    # ais.check_connection_rs232()
-
-    # lora = Device("LoRaWAN Transponder1", "Sodaq", "One", 1)
-    # lora.i2c.init_i2c(4)
-
-    #devices.append(ais)
-    #devices.append(lora)
-
-    #dab_folder = Folder(os.path.expanduser("~/.dab/received-messages"))
-    dab_folder = Folder(os.path.expanduser("./correct"))
-
-    event_handler = Monitor(dab_folder)
-    devices = attach_devices(args.devices)
-    observer = Observer()
-    observer.schedule(event_handler, path=event_handler.folder.path, recursive=True)
-
-    observer.start()
-    print("Monitoring started")
-    try:
-        while (True):
-            time.sleep(1)
-
-    except KeyboardInterrupt:
-        observer.stop()
-        print("Monitoring Stopped")
-    observer.join()
+    execute()

@@ -43,7 +43,7 @@ class RS232:
 
     def write_rs232(self, msg):
         self.ser.write(str(msg).encode("utf-8")) #"!AIBBM,1,1,0,2,8,04a9M>1@PU>0U>06185=08E99V1@E=4,0*7C"
-        print("send: %s", msg)
+        print("send: ", msg)
 
     def read_rs232(self):
         msg = self.ser.readline()
