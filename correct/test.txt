@@ -1,7 +1,5 @@
 65
-Hello World!
-Initiate transmission
-Transmission started
-Terminating transmission
-terminated transmission
-End of Line
+1
+-95
+52.112
+4.1234

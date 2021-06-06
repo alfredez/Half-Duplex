@@ -76,7 +76,7 @@ class MyTestCase(unittest.TestCase):
             test_interface.get_ethernet_settings()
 
     def test_rs232(self):
-        test_rs232 = Interface.RS232()
+        test_rs232 = Interface.UART()
         #test_rs232.init_serial("/dev/ttyUSB0", 115200)
         test_rs232.set_port("/dev/ttyUSB0")
         test_rs232.set_baudrate(38400)

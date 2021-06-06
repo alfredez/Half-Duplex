@@ -3,7 +3,7 @@ import serial
 from serial import Serial
 
 
-class RS232:
+class UART:
     def __init__(self):
         self.port = ""
         self.baudrate = 0

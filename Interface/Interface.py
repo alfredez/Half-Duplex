@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from .I2C import I2C
 from .Ethernet import Ethernet
-from .RS232 import RS232
+from .UART import UART
 from .SPI import SPI
 
 
@@ -11,7 +11,7 @@ class Interface:
         self.interface_type = interface_type
 
         if self.interface_type == 0:
-            self.rs232 = RS232()
+            self.rs232 = UART()
         elif self.interface_type == 1:
             self.i2c = I2C()
         elif self.interface_type == 2:
