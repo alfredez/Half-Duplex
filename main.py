@@ -68,7 +68,7 @@ class Monitor(PatternMatchingEventHandler):
                     pass
             elif d.interface_type == 1:
                 try:
-                    d.i2c.write_i2c(dab_id, message_type)
+                    d.i2c.write_i2c(dab_id, message_type, data)
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
@@ -121,7 +121,7 @@ def execute():
 
 
 def get_dab_signal():
-    return -30
+    return 20
 
 
 def attach_devices(csv_parameter):
