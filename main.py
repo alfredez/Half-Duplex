@@ -41,14 +41,17 @@ class Monitor(PatternMatchingEventHandler):
         for line in new_file.get_lines():
             print(line)
 
-        self.acknowledge(dab_id, message_type)
+        data = []
+        if message_type == 4:
+            data.append(get_dab_signal())
+        self.acknowledge(dab_id, message_type, data)
 
-    def acknowledge(self, dab_id, message_type):
+    def acknowledge(self, dab_id, message_type, data):
         for d in self.devices:
             if d.interface_type == 0:
                 try:
                     if message_type == 4:
-                        msg = '  ACK:' + str(dab_id) + ',MSG:' + str(message_type) + ',RSSI:122,SNR:-1'
+                        msg = '  ACK:' + str(dab_id) + ',MSG:' + str(message_type) + ',RSSI:' + str(data[0]) + ',SNR:-1'
                         aisBits = BitVector.BitVector(textstring=msg)
                         payloadStr, pad = binary.bitvectoais6(aisBits)  # [0]
                         buffer = nmea.bbmEncode(1, 1, 0, 1, 8, payloadStr, pad, appendEOL=False)
@@ -115,6 +118,10 @@ def execute():
         observer.stop()
         print("Monitoring Stopped")
     observer.join()
+
+
+def get_dab_signal():
+    return -30
 
 
 def attach_devices(csv_parameter):
