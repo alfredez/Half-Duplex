@@ -10,6 +10,15 @@ class Interface:
 
         self.interface_type = interface_type
 
+        """
+        Interface value (interface_type) given by the Device-object
+        must be equal to the following interfaces to make use of the implementation
+        
+        UART                =   1
+        I2C                 =   2
+        Socket (Ethernet)   =   3
+        SPI                 =   4
+        """
         if self.interface_type == 0:
             self.rs232 = UART()
         elif self.interface_type == 1:

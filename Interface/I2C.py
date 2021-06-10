@@ -28,13 +28,17 @@ class I2C:
                 pass
 
     def write_i2c(self, data, message_type):
-        # Write a single byte to address 80
-        buff = []
-        buff.append(data)
-        buff.append(message_type)
-        msg = i2c_msg.write(self.address, buff)
-        self.bus.i2c_rdwr(msg)
-        print("data send")
+        try:
+            # Write a single byte to address 80
+            buff = []
+            buff.append(data)
+            buff.append(message_type)
+            msg = i2c_msg.write(self.address, buff)
+            self.bus.i2c_rdwr(msg)
+            print("I2C data send for acknowledgement: ", buff)
+        except:
+            print("Could not send by I2C")
+            pass
 
     def read_i2c(self):
         # Read 64 bytes from address 80

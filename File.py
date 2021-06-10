@@ -25,3 +25,6 @@ class File:
     def get_coordinates(self):
         return float(self.lines[2]), float(self.lines[3])
 
+    def get_lines(self):
+        return self.lines
+
