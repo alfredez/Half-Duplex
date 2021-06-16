@@ -33,7 +33,8 @@ class I2C:
             buff = []
             buff.append(dab_id)
             buff.append(message_type)
-            buff.append(data[0])
+            if data:
+                buff.append(data[0])
             msg = i2c_msg.write(self.address, buff)
             self.bus.i2c_rdwr(msg)
             print("I2C data send for acknowledgement: ", buff)
