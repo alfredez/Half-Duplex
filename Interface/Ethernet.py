@@ -35,8 +35,9 @@ class Ethernet:
 
         buffer = json.dumps({"ack": data[0], "msg": data[1]})
         self.sock.send(buffer.encode())
+        reply = self.sock.recv(1024)
 
-        print("Client Sent : ", data)
+        print("Client Sent : ", reply)
 
     def read_socket(self):
         data, addr = self.sock.recvfrom(4096)
