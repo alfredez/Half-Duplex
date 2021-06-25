@@ -1,4 +1,5 @@
 import socket
+import json
 
 
 class Ethernet:
@@ -22,7 +23,7 @@ class Ethernet:
     def init_socket(self, IP, PORT):
         self.ip_address = IP
         self.socket_port = PORT
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect_socket(self):
         self.sock.connect((self.ip_address, self.socket_port))
@@ -30,9 +31,12 @@ class Ethernet:
     def close_socket(self):
         self.sock.close()
 
-    def write_socket(self, msg):
-        self.sock.sendto(msg.encode('utf-8'), (self.ip_address, self.socket_port))
-        print("Client Sent : ", msg)
+    def write_socket(self, data):
+
+        buffer = json.dumps({"ack": data[0], "msg": data[1]})
+        self.sock.send(buffer.encode())
+
+        print("Client Sent : ", data)
 
     def read_socket(self):
         data, addr = self.sock.recvfrom(4096)

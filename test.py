@@ -7,22 +7,39 @@ from Device import Device
 from Interface import Interface
 from main import Monitor
 
+''''
+project: Half-Duplex
+author: Alfred Espinosa Encarnación
+date: 30-03-2021
+
+Description: Testing method to test the functionalities of Half-Duplex
+'''
 
 class MyTestCase(unittest.TestCase):
     def test_file(self):
+
+        # expected values when reading from dab+ message "bb.txt"
+        assess_dab_id = 67
+        assess_message_type = 4
+        assess_latitude = 52.6525
+        assess_longitude = 4.7448
+
+        # read the data from dab+ message
         test_filename = "bb.txt"
         test_path = "correct/"
         test_file = File(test_filename)
         test_file.set_lines(test_path)
 
+        # assign data from dab+ message to variables
         test_dab_id = test_file.get_dab_id()
         test_message_type = test_file.get_message_type()
         test_latitude, test_longitude = test_file.get_coordinates()
 
-        self.assertEqual(67, test_dab_id)
-        self.assertEqual(4, test_message_type)
-        self.assertEqual(52.6525, test_latitude)
-        self.assertEqual(4.7448, test_longitude)
+        # check if the data from dab+ message equals to the expected data
+        self.assertEqual(assess_dab_id, test_dab_id)
+        self.assertEqual(assess_message_type, test_message_type)
+        self.assertEqual(assess_latitude, test_latitude)
+        self.assertEqual(assess_longitude, test_longitude)
 
     def test_folder(self):
         test_path = "correct/"
