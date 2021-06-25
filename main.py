@@ -74,9 +74,7 @@ class Monitor(PatternMatchingEventHandler):
                     pass
             elif d.interface_type == 2:
                 try:
-                    d.ethernet.connect_socket()
                     d.ethernet.write_socket([dab_id, message_type])
-                    d.ethernet.close_socket()
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
 
@@ -155,6 +153,7 @@ def attach_devices(csv_parameter):
                     print(row["name"])
                     lan = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
                     lan.ethernet.init_socket(row["address"], int(row["setting"]))
+                    lan.ethernet.connect_socket()
                     listed_devices.append(lan)
 
                 if int(row["interface_type"]) == 3:
