@@ -74,8 +74,9 @@ class Monitor(PatternMatchingEventHandler):
                     pass
             elif d.interface_type == 2:
                 try:
-
+                    d.ethernet.connect_socket()
                     d.ethernet.write_socket([dab_id, message_type])
+                    d.ethernet.close_socket()
                 except ("There is no connection with: %s" % d.name):
                     print("Could not send with: %s" % d.name)
                     pass
