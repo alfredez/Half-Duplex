@@ -153,7 +153,6 @@ def attach_devices(csv_parameter):
                     print(row["name"])
                     lan = Device(row["name"], row["branch"], row["model"], int(row["interface_type"]))
                     lan.ethernet.init_socket(row["address"], int(row["setting"]))
-                    lan.ethernet.connect_socket()
                     listed_devices.append(lan)
 
                 if int(row["interface_type"]) == 3:

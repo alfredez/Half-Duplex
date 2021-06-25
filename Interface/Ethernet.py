@@ -34,8 +34,10 @@ class Ethernet:
     def write_socket(self, data):
 
         buffer = json.dumps({"ack": data[0], "msg": data[1]})
+        self.connect_socket()
         self.sock.send(buffer.encode())
         reply = self.sock.recv(1024)
+        self.close_socket()
 
         print("Client Sent : ", reply)
 
