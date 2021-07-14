@@ -1,21 +1,26 @@
 # Interface
 
+The Interface class provides multiple interfaces used for devices that will be attached to the Raspberry Pi.
+
 ## Features
 
 Following features are provided
 
-- test
+- UART interface to communicate with the AIS Base Station by USB <-> RS232
+- I2C Interface to comminicate with I2C-supported embedded devices
+- Socket (Ethernet) Interface to communicate with devices in the Local Area Network
+- SPI Interface to communicate with SPI-supported embedded devices
 
 ## Requirements
 
 ### Libraries
 
-- [Watchdog](https://pypi.org/project/watchdog/)
-- [aisutils](https://github.com/schwehr/noaadata) 
-- [argparse](https://docs.python.org/3/library/argparse.html)
-- [csv](https://docs.python.org/3/library/csv.html)
+- [PySerial](https://pypi.org/project/pyserial/)
+- [smbus2](https://pypi.org/project/smbus2/) 
+- [socket](https://docs.python.org/3/library/socket.html)
+- [spidev](https://pypi.org/project/spidev/)
 
 
 ## To Do
 
-- Finish Markdown document
+- Better Parent-Child relationship between the Inferface class and the interfaces (UART, I2C, ect..)
